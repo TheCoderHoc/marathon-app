@@ -2,31 +2,41 @@
 import Input from "@/components/Input";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
-import { TaskListType } from "../types";
+import { TaskGroupType } from "../types";
+import useActiveTaskGroupStore from "@/store/active-task-group-store";
 
 type PropsType = {
-    title: string;
-    id: number;
-    active: boolean;
-    onSetActiveTaskList: (taskList: TaskListType) => void;
+    taskGroup: TaskGroupType;
+    onEditTaskGroup: (id: number, title: string) => void;
 };
 
-export default function TaskList(props: PropsType) {
-    const { title, id, active, onSetActiveTaskList } = props;
+export default function TaskGroup(props: PropsType) {
+    const {
+        taskGroup: { id, title },
+        onEditTaskGroup,
+    } = props;
 
     const [isEditMode, setEditMode] = useState(true);
 
-    const [listTitle, setListTitle] = useState(title);
+    const [groupTitle, setGroupTitle] = useState(title);
 
     const inputRef = useRef<HTMLInputElement>();
 
+    const { activeTaskGroup, setActiveTaskGroup } = useActiveTaskGroupStore();
+
+    const active = activeTaskGroup?.id === id;
+
     const handleInputBlur = () => {
         setEditMode(false);
+        onEditTaskGroup(id, groupTitle);
+        setActiveTaskGroup({ id, title: groupTitle });
     };
 
     const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
             setEditMode(false);
+            onEditTaskGroup(id, groupTitle);
+            setActiveTaskGroup({ id, title: groupTitle });
         }
     };
 
@@ -42,7 +52,7 @@ export default function TaskList(props: PropsType) {
                 (isEditMode || active) && "bg-gray-200"
             } `}
             onClick={() => {
-                onSetActiveTaskList({ title, id });
+                setActiveTaskGroup({ id, title });
             }}
         >
             <div
@@ -54,8 +64,8 @@ export default function TaskList(props: PropsType) {
             </div>
             {isEditMode ? (
                 <Input
-                    value={listTitle}
-                    onChange={(e) => setListTitle(e.target.value)}
+                    value={groupTitle}
+                    onChange={(e) => setGroupTitle(e.target.value)}
                     disabled={!isEditMode}
                     className={`bg-inherit cursor-default bg-white py-2 border-0 hover:cursor-pointer ${
                         isEditMode &&
@@ -65,11 +75,11 @@ export default function TaskList(props: PropsType) {
                     onBlur={handleInputBlur}
                     onKeyDown={handleInputKeyDown}
                     onClick={() => {
-                        onSetActiveTaskList({ title, id });
+                        setActiveTaskGroup({ id, title });
                     }}
                 />
             ) : (
-                <span>{listTitle}</span>
+                <span>{groupTitle}</span>
             )}
         </li>
     );

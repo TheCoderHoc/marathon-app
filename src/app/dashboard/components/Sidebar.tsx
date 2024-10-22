@@ -5,26 +5,38 @@ import { MdSearch } from "react-icons/md";
 import Input from "@/components/Input";
 import { FiPlus } from "react-icons/fi";
 import Button from "@/components/Button";
-import TaskList from "./TaskList";
 import { useState } from "react";
-import { TaskListType } from "../types";
+import { TaskGroupType } from "../types";
+import useActiveTaskGroupStore from "@/store/active-task-group-store";
+import TaskGroup from "./TaskGroup";
 
 export default function Sidebar() {
-    const [taskLists, setTaskLists] = useState<TaskListType[]>([]);
-    const [activeTaskList, setActiveTaskList] = useState<TaskListType>();
+    const [taskGroups, setTaskGroups] = useState<TaskGroupType[]>([]);
 
-    const handleAddTaskList = () => {
-        const newTaskList = {
+    const { setActiveTaskGroup } = useActiveTaskGroupStore();
+
+    const handleAddTaskGroup = () => {
+        const newTaskGroup = {
             id: Math.floor(Math.random() * 10000),
-            title: "Untitled List (1)",
+            title: "Untitled Group (1)",
         };
 
-        setTaskLists([...taskLists, newTaskList]);
-        setActiveTaskList(newTaskList);
+        setTaskGroups([...taskGroups, newTaskGroup]);
+
+        setActiveTaskGroup(newTaskGroup);
     };
 
-    const handleSetActiveTaskList = (taskList: TaskListType) => {
-        setActiveTaskList(taskList);
+    const handleEditTaskGroup = (id: number, title: string) => {
+        const newTaskGroups = taskGroups.map((group) => {
+            if (group.id === id) {
+                return { ...group, title };
+            }
+
+            return group;
+        });
+
+        setTaskGroups(newTaskGroups);
+        
     };
 
     return (
@@ -57,14 +69,12 @@ export default function Sidebar() {
 
                 {/* Task Lists */}
                 <ul className="flex flex-col gap-2.5">
-                    {taskLists &&
-                        taskLists.map(({ id, title }) => (
-                            <TaskList
-                                key={id}
-                                title={title}
-                                id={id}
-                                active={activeTaskList?.id === id}
-                                onSetActiveTaskList={handleSetActiveTaskList}
+                    {taskGroups &&
+                        taskGroups.map((taskGroup) => (
+                            <TaskGroup
+                                key={taskGroup.id}
+                                taskGroup={taskGroup}
+                                onEditTaskGroup={handleEditTaskGroup}
                             />
                         ))}
                 </ul>
@@ -76,9 +86,9 @@ export default function Sidebar() {
                     block
                     className="bg-transparent border-none border-0 outline-none shadow-nonebg-red-500 hover:bg-gray-200 hover:text-inherit w-full py-2 flex items-center justify-start"
                     wave={false}
-                    onClick={handleAddTaskList}
+                    onClick={handleAddTaskGroup}
                 >
-                    New list
+                    New Group
                 </Button>
             </section>
         </aside>

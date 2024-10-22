@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import useActiveTaskGroupStore from "@/store/active-task-group-store";
 import { KeyboardEvent, useState } from "react";
 import { BsCircle, BsThreeDots } from "react-icons/bs";
 import { FiPlus, FiUserPlus } from "react-icons/fi";
@@ -15,6 +16,8 @@ export default function TaskListView() {
         ? "Try typing 'Pay utilities bill by Friday 6pm'"
         : "Add a task";
 
+    const { activeTaskGroup } = useActiveTaskGroupStore();
+
     const handleAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
             const task = {
@@ -28,8 +31,8 @@ export default function TaskListView() {
     return (
         <main className="bg-blue-600 flex-1 py-8 px-12 flex flex-col">
             <header className="flex items-center justify-between">
-                <h2 className="text-2xl font-semibold text-white">
-                    Untitled Task 1
+                <h2 className="text-3xl font-semibold text-white">
+                    {activeTaskGroup?.title}
                 </h2>
 
                 <div className="flex items-center gap-2">
