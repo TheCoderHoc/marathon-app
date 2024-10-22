@@ -3,17 +3,15 @@ import Input from "@/components/Input";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import { TaskGroupType } from "../types";
-import useActiveTaskGroupStore from "@/store/active-task-group-store";
+import useTaskGroup from "@/store/task-group-store";
 
 type PropsType = {
     taskGroup: TaskGroupType;
-    onEditTaskGroup: (id: number, title: string) => void;
 };
 
 export default function TaskGroup(props: PropsType) {
     const {
-        taskGroup: { id, title },
-        onEditTaskGroup,
+        taskGroup: { id, title, Icon = HiMiniBars3BottomLeft },
     } = props;
 
     const [isEditMode, setEditMode] = useState(true);
@@ -22,21 +20,22 @@ export default function TaskGroup(props: PropsType) {
 
     const inputRef = useRef<HTMLInputElement>();
 
-    const { activeTaskGroup, setActiveTaskGroup } = useActiveTaskGroupStore();
+    const { activeTaskGroup, setActiveTaskGroup, editTaskGroup } =
+        useTaskGroup();
 
-    const active = activeTaskGroup?.id === id;
+    const active = activeTaskGroup === id;
 
     const handleInputBlur = () => {
         setEditMode(false);
-        onEditTaskGroup(id, groupTitle);
-        setActiveTaskGroup({ id, title: groupTitle });
+
+        editTaskGroup(id, groupTitle);
     };
 
     const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
             setEditMode(false);
-            onEditTaskGroup(id, groupTitle);
-            setActiveTaskGroup({ id, title: groupTitle });
+
+            editTaskGroup(id, groupTitle);
         }
     };
 
@@ -52,7 +51,7 @@ export default function TaskGroup(props: PropsType) {
                 (isEditMode || active) && "bg-gray-200"
             } `}
             onClick={() => {
-                setActiveTaskGroup({ id, title });
+                setActiveTaskGroup(id);
             }}
         >
             <div
@@ -60,7 +59,7 @@ export default function TaskGroup(props: PropsType) {
                     isEditMode ? "bg-gray-200" : "bg-inherit"
                 }`}
             >
-                <HiMiniBars3BottomLeft size={20} className="text-blue-700" />
+                <Icon size={20} className="text-blue-700" />
             </div>
             {isEditMode ? (
                 <Input
@@ -75,7 +74,7 @@ export default function TaskGroup(props: PropsType) {
                     onBlur={handleInputBlur}
                     onKeyDown={handleInputKeyDown}
                     onClick={() => {
-                        setActiveTaskGroup({ id, title });
+                        setActiveTaskGroup(id);
                     }}
                 />
             ) : (
