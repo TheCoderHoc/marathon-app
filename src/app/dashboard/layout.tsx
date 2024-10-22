@@ -1,4 +1,5 @@
 import Sidebar from "./components/Sidebar";
+import TaskListView from "./components/TaskListView";
 
 type PropsType = {
     children: React.ReactNode;
@@ -9,7 +10,7 @@ export default function Layout(props: PropsType) {
         <section className="flex min-h-screen overflow-y-hidden">
             <Sidebar />
 
-            <main>{props.children}</main>
+            <TaskListView />
         </section>
     );
 }

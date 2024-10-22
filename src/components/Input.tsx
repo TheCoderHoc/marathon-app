@@ -1,5 +1,5 @@
 import { Input as AntdInput, InputProps } from "antd";
-import { ForwardedRef, forwardRef } from "react";
+import { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 type PropsType = InputProps & {
@@ -9,10 +9,10 @@ type PropsType = InputProps & {
 export default forwardRef(function Input(props: PropsType, ref: any) {
     const { id, label, className, ...rest } = props;
 
-    const classNames = twMerge("", className);
+    const classNames = twMerge("w-full", className);
 
     return (
-        <div>
+        <div className="w-full">
             {label && <label htmlFor={id}>{label}</label>}
             <AntdInput id={id} className={classNames} {...rest} ref={ref} />
         </div>
