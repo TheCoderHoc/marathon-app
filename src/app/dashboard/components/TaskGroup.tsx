@@ -59,7 +59,7 @@ export default function TaskGroup(props: PropsType) {
                     isEditMode ? "bg-gray-200" : "bg-inherit"
                 }`}
             >
-                <Icon size={20} className="text-blue-700" />
+                <Icon size={20} className="text-primary" />
             </div>
             {isEditMode ? (
                 <Input
@@ -68,7 +68,7 @@ export default function TaskGroup(props: PropsType) {
                     disabled={!isEditMode}
                     className={`bg-inherit cursor-default bg-white py-2 border-0 hover:cursor-pointer ${
                         isEditMode &&
-                        "border-0 border-b-[3px] border-solid border-blue-700"
+                        "border-0 border-b-[3px] border-solid border-primary"
                     } focus:shadow-none disabled:text-black disabled:bg-inherit`}
                     ref={inputRef}
                     onBlur={handleInputBlur}

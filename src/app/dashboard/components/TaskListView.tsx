@@ -46,9 +46,9 @@ export default function TaskListView() {
             setTaskInputValue("");
         }
     };
-    
+
     return (
-        <main className="bg-blue-600 flex-1 py-8 px-12 flex flex-col">
+        <main className="bg-primary flex-1 py-8 px-12 flex flex-col">
             <header className="flex items-center justify-between">
                 <h2 className="text-3xl font-semibold text-white">
                     {groupTitle}

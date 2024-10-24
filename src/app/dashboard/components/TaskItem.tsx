@@ -28,7 +28,7 @@ export default function TaskItem(props: PropsType) {
                         completed ? (
                             <IoCheckmarkCircleSharp
                                 size={20}
-                                className="fill-blue-500 text-white"
+                                className="fill-primary text-white"
                             />
                         ) : (
                             <BsCircle size={20} />

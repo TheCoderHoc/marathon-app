@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import { ConfigProvider } from "antd";
+import { colors } from "@/constants/colors";
 
 export const metadata: Metadata = {
     title: "Marathon App",
@@ -12,8 +14,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body>{children}</body>
-        </html>
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: colors.primary,
+                },
+            }}
+        >
+            <html lang="en">
+                <body>{children}</body>
+            </html>
+        </ConfigProvider>
     );
 }
