@@ -1,9 +1,9 @@
 "use client";
-import Input from "@/components/Input";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import { TaskGroupType } from "../types";
 import useTaskGroup from "@/store/task-group-store";
+import Input from "@/components/Input";
 
 type PropsType = {
     taskGroup: TaskGroupType;
@@ -11,10 +11,10 @@ type PropsType = {
 
 export default function TaskGroup(props: PropsType) {
     const {
-        taskGroup: { id, title, Icon = HiMiniBars3BottomLeft },
+        taskGroup: { id, title, Icon = HiMiniBars3BottomLeft, isDefault },
     } = props;
 
-    const [isEditMode, setEditMode] = useState(true);
+    const [isEditMode, setEditMode] = useState(false);
 
     const [groupTitle, setGroupTitle] = useState(title);
 
@@ -42,6 +42,13 @@ export default function TaskGroup(props: PropsType) {
         if (inputRef.current) {
             inputRef.current.focus();
             inputRef.current.select();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isDefault) {
+            setEditMode(true);
+            return;
         }
     }, []);
 

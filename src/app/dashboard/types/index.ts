@@ -4,6 +4,7 @@ export interface TaskGroupType {
     id: number;
     title: string;
     Icon?: IconType;
+    isDefault: true;
 }
 
 export interface TaskItemType {
