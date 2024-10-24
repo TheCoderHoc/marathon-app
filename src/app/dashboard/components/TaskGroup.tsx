@@ -4,6 +4,8 @@ import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import { TaskGroupType } from "../types";
 import useTaskGroup from "@/store/task-group-store";
 import Input from "@/components/Input";
+import useTask from "@/store/task-store";
+import { Tag } from "antd";
 
 type PropsType = {
     taskGroup: TaskGroupType;
@@ -23,7 +25,13 @@ export default function TaskGroup(props: PropsType) {
     const { activeTaskGroup, setActiveTaskGroup, editTaskGroup } =
         useTaskGroup();
 
+    const { tasks } = useTask();
+
     const active = activeTaskGroup === id;
+
+    const tasksCount = tasks.filter((task) =>
+        task.taskGroups.includes(id)
+    ).length;
 
     const handleInputBlur = () => {
         setEditMode(false);
@@ -54,7 +62,7 @@ export default function TaskGroup(props: PropsType) {
 
     return (
         <li
-            className={`flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-gray-200 ${
+            className={`flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-gray-200 rounded-md ${
                 (isEditMode || active) && "bg-gray-200"
             } `}
             onClick={() => {
@@ -86,6 +94,10 @@ export default function TaskGroup(props: PropsType) {
                 />
             ) : (
                 <span>{groupTitle}</span>
+            )}
+
+            {!isEditMode && !isDefault && (
+                <Tag className="rounded-full bg-gray-300 ml-auto border-none">{tasksCount}</Tag>
             )}
         </li>
     );

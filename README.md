@@ -5,4 +5,7 @@
 - Add input validation to the task group title
 - Refactor the current codebase
 - Play completion sound when a task is completed
-- 
+- Task Group Options
+    - Rename group title
+    - Duplicate group
+    - Delete group

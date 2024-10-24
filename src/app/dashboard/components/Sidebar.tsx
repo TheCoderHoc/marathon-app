@@ -14,14 +14,15 @@ export default function Sidebar() {
     const handleAddTaskGroup = () => {
         const newTaskGroup = {
             id: Math.floor(Math.random() * 10000),
-            title: "Untitled Group (1)",
+            title: "Untitled Group",
+            isDefault: false,
         };
 
         addTaskGroup(newTaskGroup);
     };
 
     return (
-        <aside className="min-w-[300px] max-w-[300px] bg-gray-100 pb-1 flex flex-col justify-between">
+        <aside className="min-w-[280px] max-w-[280px] bg-gray-100 pb-1 flex flex-col justify-between">
             <section className="px-2 py-4">
                 <div className="flex items-center gap-2">
                     <Avatar
@@ -56,7 +57,7 @@ export default function Sidebar() {
                                     taskGroup={taskGroup}
                                 />
 
-                                {index === 1 && <Divider className="my-0.5" />}
+                                {index === 2 && <Divider className="my-0.5" />}
                             </>
                         ))}
                 </ul>
