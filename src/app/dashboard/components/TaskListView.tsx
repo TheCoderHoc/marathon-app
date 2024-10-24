@@ -6,12 +6,11 @@ import { BsCircle, BsThreeDots } from "react-icons/bs";
 import { FiPlus, FiUserPlus } from "react-icons/fi";
 import { LiaCalendarWeekSolid } from "react-icons/lia";
 import { TfiAlarmClock } from "react-icons/tfi";
-import { TaskItemType } from "../types";
 import TaskItem from "./TaskItem";
 import useTaskGroup from "@/store/task-group-store";
+import useTask from "@/store/task-store";
 
 export default function TaskListView() {
-    const [tasks, setTasks] = useState<TaskItemType[]>([]);
     const [isInputFocused, setInputFocused] = useState(false);
     const [taskInputValue, setTaskInputValue] = useState("");
 
@@ -24,6 +23,8 @@ export default function TaskListView() {
     const groupTitle = taskGroups.find(
         (group) => group.id === activeTaskGroup
     )?.title;
+
+    const { tasks, addTask } = useTask();
 
     const tasksToShow = tasks.filter((task) =>
         task.taskGroups.includes(activeTaskGroup)
@@ -40,10 +41,12 @@ export default function TaskListView() {
                 taskGroups: [1, 2, activeTaskGroup],
             };
 
-            setTasks([...tasks, newTask]);
+            addTask(newTask);
+
             setTaskInputValue("");
         }
     };
+    
     return (
         <main className="bg-blue-600 flex-1 py-8 px-12 flex flex-col">
             <header className="flex items-center justify-between">

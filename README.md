@@ -7,3 +7,4 @@
 - Add the primary color to ant design config object
 - Find a font on Google Fonts
 - Refactor the current codebase
+- Play completion sound when a task is completed

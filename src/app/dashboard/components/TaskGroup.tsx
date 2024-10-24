@@ -27,7 +27,6 @@ export default function TaskGroup(props: PropsType) {
 
     const handleInputBlur = () => {
         setEditMode(false);
-
         editTaskGroup(id, groupTitle);
     };
 
@@ -42,6 +41,7 @@ export default function TaskGroup(props: PropsType) {
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
+            inputRef.current.select();
         }
     }, []);
 
