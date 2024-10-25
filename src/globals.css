@@ -5,3 +5,9 @@
 body {
     font-family: "Poppins", sans-serif;
 }
+
+.ant-drawer-body {
+    padding: 0 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}

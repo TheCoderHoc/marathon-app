@@ -5,13 +5,43 @@ import { TaskGroupType } from "../types";
 import useTaskGroup from "@/store/task-group-store";
 import Input from "@/components/Input";
 import useTask from "@/store/task-store";
-import { Tag } from "antd";
+import { Dropdown, MenuProps, Tag } from "antd";
+import useDrawerStore from "@/store/drawer-store";
+
+import { CgRename } from "react-icons/cg";
+import { HiOutlineDuplicate } from "react-icons/hi";
+import { IoTrashOutline } from "react-icons/io5";
 
 type PropsType = {
     taskGroup: TaskGroupType;
 };
 
+const menuItems = (): MenuProps["items"] => {
+    return [
+        {
+            key: "1",
+            label: "Rename",
+            icon: <CgRename size={20} />,
+            className: "w-[120px] py-3 text-gray-500",
+        },
+        {
+            key: "2",
+            label: "Duplicate",
+            icon: <HiOutlineDuplicate size={20} />,
+            className: "w-[120px] py-3 text-gray-500 border-b-[1px]",
+        },
+        {
+            key: "3",
+            label: "Delete",
+            icon: <IoTrashOutline size={20} />,
+            className: "w-[120px] py-3 text-red-500",
+        },
+    ];
+};
+
 export default function TaskGroup(props: PropsType) {
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
     const {
         taskGroup: { id, title, Icon = HiMiniBars3BottomLeft, isDefault },
     } = props;
@@ -32,6 +62,8 @@ export default function TaskGroup(props: PropsType) {
     const tasksCount = tasks.filter((task) =>
         task.taskGroups.includes(id)
     ).length;
+
+    const { onClose } = useDrawerStore();
 
     const handleInputBlur = () => {
         setEditMode(false);
@@ -60,13 +92,16 @@ export default function TaskGroup(props: PropsType) {
         }
     }, []);
 
-    return (
+    const BaseComponent = (
         <li
             className={`flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-gray-200 rounded-md ${
                 (isEditMode || active) && "bg-gray-200"
             } `}
             onClick={() => {
                 setActiveTaskGroup(id);
+                if (!isEditMode) {
+                    onClose();
+                }
             }}
         >
             <div
@@ -97,8 +132,25 @@ export default function TaskGroup(props: PropsType) {
             )}
 
             {!isEditMode && !isDefault && (
-                <Tag className="rounded-full bg-gray-300 ml-auto border-none">{tasksCount}</Tag>
+                <Tag className="rounded-full bg-gray-300 ml-auto border-none">
+                    {tasksCount}
+                </Tag>
             )}
         </li>
+    );
+
+    if (isDefault) {
+        return BaseComponent;
+    }
+
+    return (
+        <Dropdown
+            trigger={["contextMenu"]}
+            menu={{ items: menuItems() }}
+            placement="bottom"
+            autoAdjustOverflow
+        >
+            {BaseComponent}
+        </Dropdown>
     );
 }

@@ -7,9 +7,24 @@ import { FiPlus } from "react-icons/fi";
 import Button from "@/components/Button";
 import TaskGroup from "./TaskGroup";
 import useTaskGroup from "@/store/task-group-store";
+import { twMerge } from "tailwind-merge";
+import { AiOutlinePlus } from "react-icons/ai";
+import useDrawerStore from "@/store/drawer-store";
+import { HiOutlineBars3 } from "react-icons/hi2";
 
-export default function Sidebar() {
+type PropsType = {
+    className?: string;
+};
+
+export default function Sidebar(props: PropsType) {
     const { taskGroups, addTaskGroup } = useTaskGroup();
+
+    const classNames = twMerge(
+        "min-w-[280px] max-w-[280px] bg-gray-100 pb-1 flex flex-col justify-between",
+        props.className
+    );
+
+    const { onClose } = useDrawerStore();
 
     const handleAddTaskGroup = () => {
         const newTaskGroup = {
@@ -22,9 +37,15 @@ export default function Sidebar() {
     };
 
     return (
-        <aside className="min-w-[280px] max-w-[280px] bg-gray-100 pb-1 flex flex-col justify-between">
-            <section className="px-2 py-4">
-                <div className="flex items-center gap-2">
+        <aside className={classNames} style={{ scrollbarWidth: "thin" }}>
+            <section className="px-2">
+                <Button
+                    icon={<HiOutlineBars3 size={24} />}
+                    className="bg-transparent border-none shadow-none text-black md:hidden "
+                    onClick={onClose}
+                />
+
+                <div className="flex items-center gap-2 mt-2">
                     <Avatar
                         alt="Dave Wilson"
                         icon="DW"
