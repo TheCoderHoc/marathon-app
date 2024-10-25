@@ -16,34 +16,45 @@ type PropsType = {
     taskGroup: TaskGroupType;
 };
 
-const menuItems = (): MenuProps["items"] => {
+const menuItems = (
+    handleRenameTaskGroup: () => void,
+    handleDuplicateTaskGroup: () => void,
+    handleDeleteTaskGroup: () => void
+): MenuProps["items"] => {
     return [
         {
             key: "1",
             label: "Rename",
             icon: <CgRename size={20} />,
             className: "w-[120px] py-3 text-gray-500",
+            onClick: handleRenameTaskGroup,
         },
         {
             key: "2",
             label: "Duplicate",
             icon: <HiOutlineDuplicate size={20} />,
             className: "w-[120px] py-3 text-gray-500 border-b-[1px]",
+            onClick: handleDuplicateTaskGroup,
         },
         {
             key: "3",
             label: "Delete",
             icon: <IoTrashOutline size={20} />,
             className: "w-[120px] py-3 text-red-500",
+            onClick: handleDeleteTaskGroup,
         },
     ];
 };
 
 export default function TaskGroup(props: PropsType) {
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
-
     const {
-        taskGroup: { id, title, Icon = HiMiniBars3BottomLeft, isDefault },
+        taskGroup: {
+            id,
+            title,
+            Icon = HiMiniBars3BottomLeft,
+            isDefault,
+            isDuplicated,
+        },
     } = props;
 
     const [isEditMode, setEditMode] = useState(false);
@@ -52,10 +63,15 @@ export default function TaskGroup(props: PropsType) {
 
     const inputRef = useRef<HTMLInputElement>();
 
-    const { activeTaskGroup, setActiveTaskGroup, editTaskGroup } =
-        useTaskGroup();
+    const {
+        activeTaskGroup,
+        setActiveTaskGroup,
+        editTaskGroup,
+        addTaskGroup,
+        deleteTaskGroup,
+    } = useTaskGroup();
 
-    const { tasks } = useTask();
+    const { tasks, removeTask } = useTask();
 
     const active = activeTaskGroup === id;
 
@@ -86,11 +102,58 @@ export default function TaskGroup(props: PropsType) {
     }, []);
 
     useEffect(() => {
-        if (!isDefault) {
-            setEditMode(true);
+        if (!isDefault && isDuplicated) {
+            setEditMode(false);
             return;
         }
+
+        if (!isDefault) {
+            setEditMode(true);
+        }
     }, []);
+
+    /* ------------------------------------------------------- */
+    const handleRenameTaskGroup = () => {
+        setEditMode(true);
+    };
+
+    const handleDuplicateTaskGroup = () => {
+        const newTaskGroup: TaskGroupType = {
+            id: Math.floor(Math.random() * 10000),
+            title: title + " copy",
+            isDefault: false,
+            isDuplicated: true,
+        };
+
+        addTaskGroup(newTaskGroup);
+
+        const currentGroupTasks = tasks.filter((task) =>
+            task.taskGroups.includes(id)
+        );
+
+        currentGroupTasks.map((task) => {
+            return {
+                ...task,
+                taskGroups: task.taskGroups.push(newTaskGroup.id),
+            };
+        });
+    };
+
+    const handleDeleteTaskGroup = () => {
+        if (active) {
+            setActiveTaskGroup(1);
+        }
+
+        const updatedTasks = tasks.filter((task) =>
+            task.taskGroups.includes(id)
+        );
+
+        updatedTasks.forEach((task) => {
+            removeTask(task.id);
+        });
+
+        deleteTaskGroup(id);
+    };
 
     const BaseComponent = (
         <li
@@ -146,7 +209,13 @@ export default function TaskGroup(props: PropsType) {
     return (
         <Dropdown
             trigger={["contextMenu"]}
-            menu={{ items: menuItems() }}
+            menu={{
+                items: menuItems(
+                    handleRenameTaskGroup,
+                    handleDuplicateTaskGroup,
+                    handleDeleteTaskGroup
+                ),
+            }}
             placement="bottom"
             autoAdjustOverflow
         >

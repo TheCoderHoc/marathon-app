@@ -5,6 +5,7 @@ export interface TaskGroupType {
     title: string;
     Icon?: IconType;
     isDefault: boolean;
+    isDuplicated?: boolean,
 }
 
 export interface TaskItemType {

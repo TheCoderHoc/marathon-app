@@ -15,6 +15,10 @@ const useTask = create<TaskState>((set) => ({
         set((state) => ({
             tasks: [...state.tasks, task],
         })),
+    duplicateTasks: (tasks: TaskItemType[]) =>
+        set((state) => ({
+            tasks: [...state.tasks, ...tasks],
+        })),
     removeTask: (id) =>
         set((state) => ({
             tasks: state.tasks.filter((task) => task.id !== id),
