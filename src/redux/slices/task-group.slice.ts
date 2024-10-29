@@ -19,6 +19,7 @@ const taskGroupSlice = createSlice({
         addTaskGroup: (state, action: PayloadAction<TaskGroupType>) => {
             const newTaskGroup = action.payload;
             state.taskGroups.push(newTaskGroup);
+            state.activeTaskGroupId = newTaskGroup.id;
         },
 
         removeTaskGroup: (state, action: PayloadAction<number>) => {

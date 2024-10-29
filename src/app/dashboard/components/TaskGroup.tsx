@@ -8,8 +8,7 @@ import { HiOutlineDuplicate } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 import { TaskGroupType } from "../types/task-group";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { duplicateTasks, removeTask } from "@/redux/slices/tasks.slice";
-import { TaskItemType } from "../types/task.types";
+import { removeTask } from "@/redux/slices/tasks.slice";
 import {
     addTaskGroup,
     editTaskGroup,
@@ -69,11 +68,9 @@ export default function TaskGroup(props: PropsType) {
 
     const [groupTitle, setGroupTitle] = useState(title);
 
-    const inputRef = useRef<HTMLInputElement>();
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const { taskGroups, activeTaskGroupId } = useAppSelector(
-        (state) => state.taskGroup
-    );
+    const { activeTaskGroupId } = useAppSelector((state) => state.taskGroup);
 
     const { tasks } = useAppSelector((state) => state.task);
 
@@ -98,13 +95,6 @@ export default function TaskGroup(props: PropsType) {
     };
 
     useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.select();
-        }
-    }, []);
-
-    useEffect(() => {
         if (!isDefault && isDuplicated) {
             setEditMode(false);
             return;
@@ -115,12 +105,12 @@ export default function TaskGroup(props: PropsType) {
         }
     }, []);
 
-    /* ------------------------------------------------------- */
-    const handleRenameTaskGroup = () => {
-        setEditMode(true);
-    };
-
-    // console.log({tasks})
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.select();
+        }
+    }, [isEditMode]);
 
     const handleDuplicateTaskGroup = () => {
         const newTaskGroup: TaskGroupType = {
@@ -168,7 +158,7 @@ export default function TaskGroup(props: PropsType) {
             dispatch(removeTask(task.id));
         });
 
-        dispatch(removeTaskGroup(id))
+        dispatch(removeTaskGroup(id));
     };
 
     const BaseComponent = (
@@ -227,7 +217,9 @@ export default function TaskGroup(props: PropsType) {
             trigger={["contextMenu"]}
             menu={{
                 items: menuItems(
-                    handleRenameTaskGroup,
+                    () => {
+                        setEditMode(true);
+                    },
                     handleDuplicateTaskGroup,
                     handleDeleteTaskGroup
                 ),
