@@ -106,7 +106,7 @@ export default function TaskListView() {
                     onFocus={() => setInputFocused(true)}
                     onBlur={() => setInputFocused(false)}
                     suffix={
-                        taskInputValue.length > 0 ? <TaskInputSuffix /> : null
+                        taskInputValue.length > 0 ? <TaskInputSuffix /> : <></>
                     }
                     onKeyDown={handleAddTask}
                 />
