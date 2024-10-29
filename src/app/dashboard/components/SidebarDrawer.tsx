@@ -1,13 +1,19 @@
 import { Drawer } from "antd";
 import Sidebar from "./Sidebar";
-import useDrawerStore from "@/store/drawer-store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { closeSidebarDrawer, openSidebarDrawer } from "@/redux/slices/ui.slice";
 export default function SidebarDrawer() {
-    const { isOpen, onClose } = useDrawerStore();
+    const dispatch = useAppDispatch();
 
+    const { isSidebarDrawerOpen } = useAppSelector((state) => state.UI);
+
+    const handleCloseDrawer = () => {
+        dispatch(closeSidebarDrawer());
+    };
     return (
         <Drawer
-            open={isOpen}
-            onClose={onClose}
+            open={isSidebarDrawerOpen}
+            onClose={handleCloseDrawer}
             placement="left"
             destroyOnClose
             width={280}

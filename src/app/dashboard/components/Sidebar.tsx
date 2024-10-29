@@ -6,24 +6,25 @@ import Input from "@/components/atoms/Input";
 import { FiPlus } from "react-icons/fi";
 import Button from "@/components/atoms/Button";
 import TaskGroup from "./TaskGroup";
-import useTaskGroup from "@/store/task-group-store";
 import { twMerge } from "tailwind-merge";
-import useDrawerStore from "@/store/drawer-store";
 import { HiOutlineBars3 } from "react-icons/hi2";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { addTaskGroup } from "@/redux/slices/task-group.slice";
+import { openSidebarDrawer } from "@/redux/slices/ui.slice";
 
 type PropsType = {
     className?: string;
 };
 
 export default function Sidebar(props: PropsType) {
-    const { taskGroups, addTaskGroup } = useTaskGroup();
+    const { taskGroups } = useAppSelector((state) => state.taskGroup);
+
+    const dispatch = useAppDispatch();
 
     const classNames = twMerge(
         "min-w-[280px] max-w-[280px] bg-gray-100 pb-1 flex flex-col justify-between",
         props.className
     );
-
-    const { onClose } = useDrawerStore();
 
     const handleAddTaskGroup = () => {
         const newTaskGroup = {
@@ -32,7 +33,7 @@ export default function Sidebar(props: PropsType) {
             isDefault: false,
         };
 
-        addTaskGroup(newTaskGroup);
+        dispatch(addTaskGroup(newTaskGroup));
     };
 
     return (
@@ -41,7 +42,7 @@ export default function Sidebar(props: PropsType) {
                 <Button
                     icon={<HiOutlineBars3 size={24} />}
                     className="bg-transparent border-none shadow-none text-black md:hidden "
-                    onClick={onClose}
+                    onClick={() => dispatch(openSidebarDrawer())}
                 />
 
                 <div className="flex items-center gap-2 mt-2">

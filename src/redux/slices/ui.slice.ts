@@ -5,11 +5,13 @@ import { TaskItemType } from "@/app/dashboard/types/task.types";
 type UIStateType = {
     isTaskItemViewOpen: boolean;
     selectedTaskToView: TaskItemType | null;
+    isSidebarDrawerOpen: boolean;
 };
 
 const initialState = {
     isTaskItemViewOpen: false,
     selectedTaskToView: null,
+    isSidebarDrawerOpen: false,
 } satisfies UIStateType as UIStateType;
 
 const UISlice = createSlice({
@@ -25,8 +27,21 @@ const UISlice = createSlice({
             state.isTaskItemViewOpen = false;
             state.selectedTaskToView = null;
         },
+
+        openSidebarDrawer: (state) => {
+            state.isSidebarDrawerOpen = true;
+        },
+
+        closeSidebarDrawer: (state) => {
+            state.isSidebarDrawerOpen = false;
+        },
     },
 });
 
-export const { openTaskItemView, closeTaskItemView } = UISlice.actions;
+export const {
+    openTaskItemView,
+    closeTaskItemView,
+    openSidebarDrawer,
+    closeSidebarDrawer,
+} = UISlice.actions;
 export default UISlice.reducer;

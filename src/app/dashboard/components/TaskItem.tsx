@@ -1,11 +1,11 @@
 import { BsCircle } from "react-icons/bs";
 import { AiOutlineStar } from "react-icons/ai";
 import Button from "@/components/atoms/Button";
-import useTask from "@/store/task-store";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { TaskItemType } from "../types/task.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui.slice";
+import { toggleTaskCompletion } from "@/redux/slices/tasks.slice";
 
 type PropsType = {
     task: TaskItemType;
@@ -16,31 +16,21 @@ export default function TaskItem(props: PropsType) {
         task: { id, title, completed },
     } = props;
 
-    const { toggleTaskCompletion } = useTask();
+    const dispatch = useAppDispatch();
 
     const { isTaskItemViewOpen, selectedTaskToView } = useAppSelector(
         (state) => state.UI
     );
-    const dispatch = useAppDispatch();
 
     const handleToggleCompletion = () => {
-        toggleTaskCompletion(id);
+        dispatch(toggleTaskCompletion(id));
     };
 
     const handleClick = () => {
-        // If the selected task is clicked and view is already open?
-        // Close the view
-        // If the selected
-
         if (selectedTaskToView?.id === id && isTaskItemViewOpen) {
             dispatch(closeTaskItemView());
             return;
         }
-
-        // if (isTaskItemViewOpen) {
-        //     dispatch(closeTaskItemView());
-        //     return;
-        // }
 
         dispatch(openTaskItemView(props.task));
     };

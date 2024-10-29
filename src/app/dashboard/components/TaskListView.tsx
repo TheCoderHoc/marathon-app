@@ -7,12 +7,11 @@ import { FiPlus, FiUserPlus } from "react-icons/fi";
 import { LiaCalendarWeekSolid } from "react-icons/lia";
 import { TfiAlarmClock } from "react-icons/tfi";
 import TaskItem from "./TaskItem";
-import useTaskGroup from "@/store/task-group-store";
-import useTask from "@/store/task-store";
-import useDrawerStore from "@/store/drawer-store";
 import { HiOutlineBars3 } from "react-icons/hi2";
-import { useAppDispatch } from "@/redux/store";
-import { closeTaskItemView } from "@/redux/slices/ui.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { closeTaskItemView, openSidebarDrawer } from "@/redux/slices/ui.slice";
+import { TaskItemType } from "../types/task.types";
+import { addTask } from "@/redux/slices/tasks.slice";
 
 export default function TaskListView() {
     const [isInputFocused, setInputFocused] = useState(false);
@@ -20,36 +19,39 @@ export default function TaskListView() {
 
     const dispatch = useAppDispatch();
 
-    const { onOpen } = useDrawerStore();
+    const { isSidebarDrawerOpen } = useAppSelector((state) => state.UI);
 
     const inputPlaceholder = isInputFocused
         ? "Try typing 'Pay utilities bill by Friday 6pm'"
         : "Add a task";
 
-    const { taskGroups, activeTaskGroup } = useTaskGroup();
+    const { taskGroups, activeTaskGroupId } = useAppSelector(
+        (state) => state.taskGroup
+    );
 
     const groupTitle = taskGroups.find(
-        (group) => group.id === activeTaskGroup
+        (group) => group.id === activeTaskGroupId
     )?.title;
 
-    const { tasks, addTask } = useTask();
+    const { tasks } = useAppSelector((state) => state.task);
 
     const tasksToShow = tasks.filter((task) =>
-        task.taskGroups.includes(activeTaskGroup)
+        task.taskGroups.includes(activeTaskGroupId)
     );
 
     const handleAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
-            const newTask = {
+            const newTask: TaskItemType = {
                 id: Math.floor(Math.random() * 1000),
                 title: taskInputValue,
                 completed: false,
                 starred: false,
                 important: false,
-                taskGroups: [1, 2, activeTaskGroup],
+                taskGroups: [1, 2, activeTaskGroupId],
+                steps: [],
             };
 
-            addTask(newTask);
+            dispatch(addTask(newTask));
 
             setTaskInputValue("");
 
@@ -63,7 +65,7 @@ export default function TaskListView() {
                 <Button
                     icon={<HiOutlineBars3 size={24} />}
                     className="bg-transparent border-none shadow-none text-white md:hidden"
-                    onClick={onOpen}
+                    onClick={() => dispatch(openSidebarDrawer())}
                 />
 
                 <div className="flex items-center justify-between">

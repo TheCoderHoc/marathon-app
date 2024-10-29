@@ -5,4 +5,7 @@ export interface TaskItemType {
     starred: boolean;
     important: boolean;
     taskGroups: number[];
+    steps: TaskItemStepType[];
 }
+
+interface TaskItemStepType extends Partial<TaskItemType> {}

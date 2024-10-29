@@ -19,7 +19,7 @@ export default function TaskStepItem(props: PropsType) {
         <li className="list-none rounded-md py-0.5 flex items-center justify-between">
             <div className="flex items-center gap-4">
                 {inputFocused && props.new ? (
-                    <AiOutlinePlus size={16} className="text-primary" />
+                    <AiOutlinePlus size={16} className="text-primary ml-0.5" />
                 ) : (
                     <LuCircle size={15} className="ml-0.5" />
                 )}

@@ -1,16 +1,22 @@
 "use client";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
-import useTaskGroup from "@/store/task-group-store";
 import Input from "@/components/atoms/Input";
-import useTask from "@/store/task-store";
 import { Dropdown, MenuProps, Tag } from "antd";
-import useDrawerStore from "@/store/drawer-store";
-
 import { CgRename } from "react-icons/cg";
 import { HiOutlineDuplicate } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 import { TaskGroupType } from "../types/task-group";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { duplicateTasks, removeTask } from "@/redux/slices/tasks.slice";
+import { TaskItemType } from "../types/task.types";
+import {
+    addTaskGroup,
+    editTaskGroup,
+    removeTaskGroup,
+    setActiveTaskGroupId,
+} from "@/redux/slices/task-group.slice";
+import { closeSidebarDrawer } from "@/redux/slices/ui.slice";
 
 type PropsType = {
     taskGroup: TaskGroupType;
@@ -57,40 +63,37 @@ export default function TaskGroup(props: PropsType) {
         },
     } = props;
 
+    const dispatch = useAppDispatch();
+
     const [isEditMode, setEditMode] = useState(false);
 
     const [groupTitle, setGroupTitle] = useState(title);
 
     const inputRef = useRef<HTMLInputElement>();
 
-    const {
-        activeTaskGroup,
-        setActiveTaskGroup,
-        editTaskGroup,
-        addTaskGroup,
-        deleteTaskGroup,
-    } = useTaskGroup();
+    const { taskGroups, activeTaskGroupId } = useAppSelector(
+        (state) => state.taskGroup
+    );
 
-    const { tasks, removeTask } = useTask();
+    const { tasks } = useAppSelector((state) => state.task);
 
-    const active = activeTaskGroup === id;
+    const isActive = activeTaskGroupId === id;
 
     const tasksCount = tasks.filter((task) =>
         task.taskGroups.includes(id)
     ).length;
 
-    const { onClose } = useDrawerStore();
-
     const handleInputBlur = () => {
         setEditMode(false);
-        editTaskGroup(id, groupTitle);
+
+        dispatch(editTaskGroup({ ...props.taskGroup, title: groupTitle }));
     };
 
     const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
             setEditMode(false);
 
-            editTaskGroup(id, groupTitle);
+            dispatch(editTaskGroup({ ...props.taskGroup, title: groupTitle }));
         }
     };
 
@@ -117,6 +120,8 @@ export default function TaskGroup(props: PropsType) {
         setEditMode(true);
     };
 
+    // console.log({tasks})
+
     const handleDuplicateTaskGroup = () => {
         const newTaskGroup: TaskGroupType = {
             id: Math.floor(Math.random() * 10000),
@@ -125,23 +130,34 @@ export default function TaskGroup(props: PropsType) {
             isDuplicated: true,
         };
 
-        addTaskGroup(newTaskGroup);
+        dispatch(addTaskGroup(newTaskGroup));
 
         const currentGroupTasks = tasks.filter((task) =>
             task.taskGroups.includes(id)
         );
 
-        currentGroupTasks.map((task) => {
-            return {
-                ...task,
-                taskGroups: task.taskGroups.push(newTaskGroup.id),
-            };
-        });
+        console.log(currentGroupTasks);
+
+        // const duplicatedTasks = currentGroupTasks.map((task) => {
+        //     return {
+        //         ...task,
+        //         taskGroups: task.taskGroups.map((group, index) => {
+        //             if (index === 2) {
+        //                 group = newTaskGroup.id;
+        //                 return group;
+        //             }
+
+        //             return group;
+        //         }),
+        //     };
+        // });
+
+        // dispatch(duplicateTasks(duplicatedTasks));
     };
 
     const handleDeleteTaskGroup = () => {
-        if (active) {
-            setActiveTaskGroup(1);
+        if (isActive) {
+            dispatch(setActiveTaskGroupId(1));
         }
 
         const updatedTasks = tasks.filter((task) =>
@@ -149,21 +165,21 @@ export default function TaskGroup(props: PropsType) {
         );
 
         updatedTasks.forEach((task) => {
-            removeTask(task.id);
+            dispatch(removeTask(task.id));
         });
 
-        deleteTaskGroup(id);
+        dispatch(removeTaskGroup(id))
     };
 
     const BaseComponent = (
         <li
             className={`flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-gray-200 rounded-md ${
-                (isEditMode || active) && "bg-gray-200"
+                (isEditMode || isActive) && "bg-gray-200"
             } `}
             onClick={() => {
-                setActiveTaskGroup(id);
+                dispatch(setActiveTaskGroupId(id));
                 if (!isEditMode) {
-                    onClose();
+                    dispatch(closeSidebarDrawer());
                 }
             }}
         >
@@ -187,7 +203,7 @@ export default function TaskGroup(props: PropsType) {
                     onBlur={handleInputBlur}
                     onKeyDown={handleInputKeyDown}
                     onClick={() => {
-                        setActiveTaskGroup(id);
+                        dispatch(setActiveTaskGroupId(id));
                     }}
                 />
             ) : (
