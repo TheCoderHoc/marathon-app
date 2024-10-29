@@ -208,9 +208,10 @@ export default function TaskGroup(props: PropsType) {
         </li>
     );
 
-    if (isDefault) {
+    if (isDefault || isEditMode) {
         return BaseComponent;
     }
+
 
     return (
         <Dropdown
