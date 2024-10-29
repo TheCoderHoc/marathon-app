@@ -28,7 +28,7 @@ const taskSlice = createSlice({
         toggleTaskCompletion: (state, action: PayloadAction<number>) => {
             const taskId = action.payload;
 
-            state.tasks.map((task) => {
+            state.tasks = state.tasks.map((task) => {
                 if (task.id === taskId) {
                     return { ...task, completed: !task.completed };
                 }

@@ -6,6 +6,7 @@ import { TaskItemType } from "../types/task.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui.slice";
 import { toggleTaskCompletion } from "@/redux/slices/tasks.slice";
+import { MouseEvent } from "react";
 
 type PropsType = {
     task: TaskItemType;
@@ -22,7 +23,11 @@ export default function TaskItem(props: PropsType) {
         (state) => state.UI
     );
 
-    const handleToggleCompletion = () => {
+    const handleToggleCompletion = (
+        e: MouseEvent<HTMLElement, globalThis.MouseEvent>
+    ) => {
+        e.stopPropagation();
+
         dispatch(toggleTaskCompletion(id));
     };
 

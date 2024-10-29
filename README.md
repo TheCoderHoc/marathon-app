@@ -7,4 +7,3 @@
 - Play completion sound when a task is completed
 
 ## BUGS
-- Task input loses focus when first character is entered
