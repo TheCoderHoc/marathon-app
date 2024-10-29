@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+* {
     font-family: "Poppins", sans-serif;
 }
 
@@ -10,4 +10,8 @@ body {
     padding: 0 !important;
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.card {
+    @apply rounded-md px-4 py-6 border-solid border-gray-300 border-[1px] bg-white;
 }

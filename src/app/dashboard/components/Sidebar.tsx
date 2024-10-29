@@ -2,13 +2,12 @@
 
 import { Avatar, Divider } from "antd";
 import { MdSearch } from "react-icons/md";
-import Input from "@/components/Input";
+import Input from "@/components/atoms/Input";
 import { FiPlus } from "react-icons/fi";
-import Button from "@/components/Button";
+import Button from "@/components/atoms/Button";
 import TaskGroup from "./TaskGroup";
 import useTaskGroup from "@/store/task-group-store";
 import { twMerge } from "tailwind-merge";
-import { AiOutlinePlus } from "react-icons/ai";
 import useDrawerStore from "@/store/drawer-store";
 import { HiOutlineBars3 } from "react-icons/hi2";
 
@@ -72,14 +71,11 @@ export default function Sidebar(props: PropsType) {
                 <ul className="flex flex-col gap-2.5 mt-3">
                     {taskGroups &&
                         taskGroups.map((taskGroup, index) => (
-                            <>
-                                <TaskGroup
-                                    key={taskGroup.id}
-                                    taskGroup={taskGroup}
-                                />
+                            <div key={taskGroup.id}>
+                                <TaskGroup taskGroup={taskGroup} />
 
                                 {index === 2 && <Divider className="my-0.5" />}
-                            </>
+                            </div>
                         ))}
                 </ul>
             </section>

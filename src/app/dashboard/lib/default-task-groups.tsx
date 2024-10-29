@@ -1,7 +1,7 @@
 import { FiSun } from "react-icons/fi";
 import { GoHome } from "react-icons/go";
-import { TaskGroupType } from "../types";
 import { AiOutlineStar } from "react-icons/ai";
+import { TaskGroupType } from "../types/task-group";
 
 const defaultTaskGroups: TaskGroupType[] = [
     {
@@ -10,12 +10,14 @@ const defaultTaskGroups: TaskGroupType[] = [
         Icon: FiSun,
         isDefault: true,
     },
+
     {
         id: 2,
         title: "Tasks",
         Icon: GoHome,
         isDefault: true,
     },
+    
     {
         id: 3,
         title: "Important",

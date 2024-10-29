@@ -1,9 +1,8 @@
 "use client";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
-import { TaskGroupType } from "../types";
 import useTaskGroup from "@/store/task-group-store";
-import Input from "@/components/Input";
+import Input from "@/components/atoms/Input";
 import useTask from "@/store/task-store";
 import { Dropdown, MenuProps, Tag } from "antd";
 import useDrawerStore from "@/store/drawer-store";
@@ -11,6 +10,7 @@ import useDrawerStore from "@/store/drawer-store";
 import { CgRename } from "react-icons/cg";
 import { HiOutlineDuplicate } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
+import { TaskGroupType } from "../types/task-group";
 
 type PropsType = {
     taskGroup: TaskGroupType;
