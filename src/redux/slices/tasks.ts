@@ -1,4 +1,4 @@
-import { TaskItemType } from "@/app/dashboard/types/task.types";
+import { TaskItemType } from "@/types/task.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type TaskStateType = {

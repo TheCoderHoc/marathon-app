@@ -1,8 +1,8 @@
 "use client";
-import Sidebar from "./components/Sidebar";
-import TaskListView from "./components/TaskListView";
-import SidebarDrawer from "./components/SidebarDrawer";
-import TaskItemViewArea from "./components/TaskItemViewArea";
+import Sidebar from "@/components/ui/Sidebar";
+import SidebarDrawer from "@/components/ui/SidebarDrawer";
+import TaskItemViewArea from "@/components/ui/TaskItemViewArea";
+import TaskListView from "@/components/ui/TaskListView";
 import { useAppSelector } from "@/redux/store";
 
 export default function Layout() {

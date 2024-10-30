@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { TaskItemType } from "@/app/dashboard/types/task.types";
+import { TaskItemType } from "@/types/task.types";
 
 type UIStateType = {
     isTaskItemViewOpen: boolean;

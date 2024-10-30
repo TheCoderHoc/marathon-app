@@ -2,53 +2,21 @@
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import Input from "@/components/atoms/Input";
-import { Dropdown, MenuProps, Tag } from "antd";
-import { CgRename } from "react-icons/cg";
-import { HiOutlineDuplicate } from "react-icons/hi";
-import { IoTrashOutline } from "react-icons/io5";
-import { TaskGroupType } from "../types/task-group";
+import { Dropdown, InputRef, Tag } from "antd";
+import { TaskGroupType } from "../../types/task-group";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { removeTask } from "@/redux/slices/tasks.slice";
+import { removeTask } from "@/redux/slices/tasks";
 import {
     addTaskGroup,
     editTaskGroup,
     removeTaskGroup,
     setActiveTaskGroupId,
-} from "@/redux/slices/task-group.slice";
-import { closeSidebarDrawer } from "@/redux/slices/ui.slice";
+} from "@/redux/slices/task-group";
+import { closeSidebarDrawer } from "@/redux/slices/ui";
+import { taskGroupDropdownMenuItems } from "@/libs/task-groups";
 
 type PropsType = {
     taskGroup: TaskGroupType;
-};
-
-const menuItems = (
-    handleRenameTaskGroup: () => void,
-    handleDuplicateTaskGroup: () => void,
-    handleDeleteTaskGroup: () => void
-): MenuProps["items"] => {
-    return [
-        {
-            key: "1",
-            label: "Rename",
-            icon: <CgRename size={20} />,
-            className: "w-[120px] py-3 text-gray-500",
-            onClick: handleRenameTaskGroup,
-        },
-        {
-            key: "2",
-            label: "Duplicate",
-            icon: <HiOutlineDuplicate size={20} />,
-            className: "w-[120px] py-3 text-gray-500 border-b-[1px]",
-            onClick: handleDuplicateTaskGroup,
-        },
-        {
-            key: "3",
-            label: "Delete",
-            icon: <IoTrashOutline size={20} />,
-            className: "w-[120px] py-3 text-red-500",
-            onClick: handleDeleteTaskGroup,
-        },
-    ];
 };
 
 export default function TaskGroup(props: PropsType) {
@@ -69,7 +37,7 @@ export default function TaskGroup(props: PropsType) {
     const [groupTitleInputValue, setGroupTitleInputValue] = useState(title);
     const [error, setError] = useState("");
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<InputRef>(null);
 
     const { activeTaskGroupId } = useAppSelector((state) => state.taskGroup);
 
@@ -83,6 +51,8 @@ export default function TaskGroup(props: PropsType) {
 
     const handleInputBlur = () => {
         setEditMode(false);
+
+        setError("");
 
         dispatch(
             editTaskGroup({
@@ -124,7 +94,7 @@ export default function TaskGroup(props: PropsType) {
         if (!isDefault) {
             setEditMode(true);
         }
-    }, []);
+    }, [isDefault, isDuplicated]);
 
     useEffect(() => {
         if (inputRef.current) {
@@ -210,10 +180,10 @@ export default function TaskGroup(props: PropsType) {
                             setGroupTitleInputValue(e.target.value)
                         }
                         disabled={!isEditMode}
-                        className={`bg-inherit cursor-default bg-white py-2 border-0 hover:cursor-pointer ${
+                        className={`bg-inherit cursor-default bg-white py-2 border-0 font-sans text-black hover:cursor-pointer ${
                             isEditMode &&
                             "border-0 border-b-[3px] border-solid border-primary"
-                        } focus:shadow-none disabled:text-black disabled:bg-inherit`}
+                        } shadow-none disabled:text-black disabled:bg-inherit`}
                         ref={inputRef}
                         onBlur={handleInputBlur}
                         onKeyDown={handleInputKeyDown}
@@ -222,7 +192,7 @@ export default function TaskGroup(props: PropsType) {
                         }}
                     />
                     {error && (
-                        <span className="text-sm font-light text-red-500">
+                        <span className="text-[12px] font-light text-red-500">
                             {error}
                         </span>
                     )}
@@ -247,7 +217,7 @@ export default function TaskGroup(props: PropsType) {
         <Dropdown
             trigger={["contextMenu"]}
             menu={{
-                items: menuItems(
+                items: taskGroupDropdownMenuItems(
                     () => {
                         setEditMode(true);
                     },

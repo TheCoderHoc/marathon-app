@@ -2,10 +2,10 @@ import { BsCircle } from "react-icons/bs";
 import { AiOutlineStar } from "react-icons/ai";
 import Button from "@/components/atoms/Button";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
-import { TaskItemType } from "../types/task.types";
+import { TaskItemType } from "../../types/task.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui.slice";
-import { toggleTaskCompletion } from "@/redux/slices/tasks.slice";
+import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui";
+import { toggleTaskCompletion } from "@/redux/slices/tasks";
 import { MouseEvent } from "react";
 
 type PropsType = {

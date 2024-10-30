@@ -1,5 +1,4 @@
 "use client";
-
 import { Avatar, Divider } from "antd";
 import { MdSearch } from "react-icons/md";
 import Input from "@/components/atoms/Input";
@@ -9,8 +8,8 @@ import TaskGroup from "./TaskGroup";
 import { twMerge } from "tailwind-merge";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { addTaskGroup } from "@/redux/slices/task-group.slice";
-import { openSidebarDrawer } from "@/redux/slices/ui.slice";
+import { addTaskGroup } from "@/redux/slices/task-group";
+import { openSidebarDrawer } from "@/redux/slices/ui";
 
 type PropsType = {
     className?: string;
@@ -54,9 +53,9 @@ export default function Sidebar(props: PropsType) {
 
                     <div>
                         <h3 className="font-bold">Dave Wilson</h3>
-                        <p className="block -mt-1 text-sm">
+                        <span className="block -mt-1 text-sm">
                             ubakawilson@gmail.com
-                        </p>
+                        </span>
                     </div>
                 </div>
 
@@ -81,17 +80,15 @@ export default function Sidebar(props: PropsType) {
                 </ul>
             </section>
 
-            <section>
-                <Button
-                    icon={<FiPlus size={20} />}
-                    block
-                    className="bg-transparent border-none border-0 outline-none shadow-nonebg-red-500 hover:bg-gray-200 hover:text-inherit w-full py-2 flex items-center justify-start"
-                    wave={false}
-                    onClick={handleAddTaskGroup}
-                >
-                    New Group
-                </Button>
-            </section>
+            <Button
+                icon={<FiPlus size={20} />}
+                block
+                className="bg-transparent border-none outline-none shadow-none hover:bg-gray-200 hover:text-inherit w-full py-2 flex items-stretch justify-start"
+                wave={false}
+                onClick={handleAddTaskGroup}
+            >
+                New Group
+            </Button>
         </aside>
     );
 }

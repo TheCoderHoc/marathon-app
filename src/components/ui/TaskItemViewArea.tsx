@@ -13,7 +13,7 @@ import { GrAttachment } from "react-icons/gr";
 import { LuCircle } from "react-icons/lu";
 import { HiOutlineTrash } from "react-icons/hi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { closeTaskItemView } from "@/redux/slices/ui.slice";
+import { closeTaskItemView } from "@/redux/slices/ui";
 
 export default function TaskItemViewArea() {
     const { selectedTaskToView } = useAppSelector((state) => state.UI);
@@ -38,7 +38,7 @@ export default function TaskItemViewArea() {
                         <div className="flex items-center gap-3">
                             <LuCircle size={20} />
                             <Input
-                                className="font-semibold border-none shadow-none text-lg p-0"
+                                className="font-semibold font-sans border-none shadow-none text-md p-0"
                                 value={title}
                             />
                         </div>
@@ -135,7 +135,7 @@ export default function TaskItemViewArea() {
 
                 <AntdInput.TextArea
                     placeholder="Add note"
-                    className="mt-4 p-4"
+                    className="mt-4 p-4 font-sans"
                 />
 
                 <div className="pt-2 border-solid border-gray-300 border-t-[1px] mt-4 flex items-center justify-between">

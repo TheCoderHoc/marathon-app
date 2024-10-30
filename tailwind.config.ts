@@ -5,6 +5,7 @@ const config: Config = {
     content: [
         "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/libs/**/*.{js,ts,jsx,tsx,mdx}",
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
@@ -12,6 +13,10 @@ const config: Config = {
             colors: {
                 primary: "#306BAC",
                 secondary: "#98B9F2",
+            },
+
+            fontFamily: {
+                sans: ["var(--font-fira-code)"],
             },
         },
     },

@@ -1,10 +1,8 @@
 import Input from "@/components/atoms/Input";
-import { BsCircle } from "react-icons/bs";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import Button from "@/components/atoms/Button";
-import { FaRegCircle } from "react-icons/fa";
 import { LuCircle } from "react-icons/lu";
 
 type PropsType = {
@@ -13,7 +11,6 @@ type PropsType = {
 
 export default function TaskStepItem(props: PropsType) {
     const [inputFocused, setInputFocused] = useState(false);
-    const [taskStepTitle, setTaskStepTitle] = useState("");
 
     return (
         <li className="list-none rounded-md py-0.5 flex items-center justify-between">
@@ -26,7 +23,7 @@ export default function TaskStepItem(props: PropsType) {
 
                 <Input
                     placeholder="Add Next Step"
-                    className={`bg-transparent font-normal border-none shadow-none text-sm placeholder:text-primary placeholder:font-normal text-gray-500 p-0 ${
+                    className={`bg-transparent font-normal border-none shadow-none text-sm placeholder:text-primary placeholder:font-normal text-gray-500 p-0 font-sans ${
                         props.new && "text-primary"
                     }`}
                     value={`${props.new ? "" : "Hello World"}`}

@@ -1,5 +1,5 @@
-import defaultTaskGroups from "@/app/dashboard/lib/default-task-groups";
-import { TaskGroupType } from "@/app/dashboard/types/task-group";
+import { defaultTaskGroups } from "@/libs/task-groups";
+import { TaskGroupType } from "@/types/task-group";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type TaskGroupStateType = {

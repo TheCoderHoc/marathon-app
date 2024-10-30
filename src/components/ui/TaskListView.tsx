@@ -9,17 +9,15 @@ import { TfiAlarmClock } from "react-icons/tfi";
 import TaskItem from "./TaskItem";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { closeTaskItemView, openSidebarDrawer } from "@/redux/slices/ui.slice";
-import { TaskItemType } from "../types/task.types";
-import { addTask } from "@/redux/slices/tasks.slice";
+import { closeTaskItemView, openSidebarDrawer } from "@/redux/slices/ui";
+import { TaskItemType } from "../../types/task.types";
+import { addTask } from "@/redux/slices/tasks";
 
 export default function TaskListView() {
     const [isInputFocused, setInputFocused] = useState(false);
     const [taskInputValue, setTaskInputValue] = useState("");
 
     const dispatch = useAppDispatch();
-
-    const { isSidebarDrawerOpen } = useAppSelector((state) => state.UI);
 
     const inputPlaceholder = isInputFocused
         ? "Try typing 'Pay utilities bill by Friday 6pm'"
@@ -95,14 +93,14 @@ export default function TaskListView() {
             </section>
 
             <footer className="mt-auto bg-gray-100 px-3 p-2 rounded-md flex items-center gap-2">
-                {isInputFocused ? <BsCircle size={24} /> : <FiPlus size={24} />}
+                {isInputFocused ? <BsCircle size={20} /> : <FiPlus size={20} />}
 
                 <Input
                     value={taskInputValue}
                     onChange={(e) => setTaskInputValue(e.target.value)}
                     placeholder={inputPlaceholder}
                     size="large"
-                    className="bg-transparent border-none shadow-none"
+                    className="bg-transparent border-none shadow-none font-sans"
                     onFocus={() => setInputFocused(true)}
                     onBlur={() => setInputFocused(false)}
                     suffix={

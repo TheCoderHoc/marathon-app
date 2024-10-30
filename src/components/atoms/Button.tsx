@@ -8,10 +8,7 @@ type PropsType = ButtonProps & {
 export default function Button(props: PropsType) {
     const { children, className, wave = true, ...rest } = props;
 
-    const classNames = twMerge(
-        "[&.ant-click-animating-node]:hidden",
-        className
-    );
+    const classNames = twMerge("", className);
 
     const BaseComponent = (
         <AntdButton className={classNames} {...rest}>

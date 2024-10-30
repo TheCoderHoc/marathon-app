@@ -1,7 +1,7 @@
 import { Drawer } from "antd";
 import Sidebar from "./Sidebar";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { closeSidebarDrawer, openSidebarDrawer } from "@/redux/slices/ui.slice";
+import { closeSidebarDrawer } from "@/redux/slices/ui";
 export default function SidebarDrawer() {
     const dispatch = useAppDispatch();
 

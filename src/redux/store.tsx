@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import UIReducer from "./slices/ui.slice";
-import TaskReducer from "./slices/tasks.slice";
-import TaskGroupReducer from "./slices/task-group.slice";
+import UIReducer from "./slices/ui";
+import TaskReducer from "./slices/tasks";
+import TaskGroupReducer from "./slices/task-group";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const store = configureStore({
