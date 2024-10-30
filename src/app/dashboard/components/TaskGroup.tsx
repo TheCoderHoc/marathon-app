@@ -66,7 +66,8 @@ export default function TaskGroup(props: PropsType) {
 
     const [isEditMode, setEditMode] = useState(false);
 
-    const [groupTitle, setGroupTitle] = useState(title);
+    const [groupTitleInputValue, setGroupTitleInputValue] = useState(title);
+    const [error, setError] = useState("");
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -83,14 +84,34 @@ export default function TaskGroup(props: PropsType) {
     const handleInputBlur = () => {
         setEditMode(false);
 
-        dispatch(editTaskGroup({ ...props.taskGroup, title: groupTitle }));
+        dispatch(
+            editTaskGroup({
+                ...props.taskGroup,
+                title:
+                    groupTitleInputValue.length === 0
+                        ? "Untitled Group"
+                        : groupTitleInputValue,
+            })
+        );
     };
 
     const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
+            if (groupTitleInputValue.length === 0) {
+                setError("Group title cannot be empty");
+                return;
+            }
+
             setEditMode(false);
 
-            dispatch(editTaskGroup({ ...props.taskGroup, title: groupTitle }));
+            dispatch(
+                editTaskGroup({
+                    ...props.taskGroup,
+                    title: groupTitleInputValue,
+                })
+            );
+
+            setError("");
         }
     };
 
@@ -181,23 +202,33 @@ export default function TaskGroup(props: PropsType) {
                 <Icon size={20} className="text-primary" />
             </div>
             {isEditMode ? (
-                <Input
-                    value={groupTitle}
-                    onChange={(e) => setGroupTitle(e.target.value)}
-                    disabled={!isEditMode}
-                    className={`bg-inherit cursor-default bg-white py-2 border-0 hover:cursor-pointer ${
-                        isEditMode &&
-                        "border-0 border-b-[3px] border-solid border-primary"
-                    } focus:shadow-none disabled:text-black disabled:bg-inherit`}
-                    ref={inputRef}
-                    onBlur={handleInputBlur}
-                    onKeyDown={handleInputKeyDown}
-                    onClick={() => {
-                        dispatch(setActiveTaskGroupId(id));
-                    }}
-                />
+                <div>
+                    <Input
+                        value={groupTitleInputValue}
+                        maxLength={10}
+                        onChange={(e) =>
+                            setGroupTitleInputValue(e.target.value)
+                        }
+                        disabled={!isEditMode}
+                        className={`bg-inherit cursor-default bg-white py-2 border-0 hover:cursor-pointer ${
+                            isEditMode &&
+                            "border-0 border-b-[3px] border-solid border-primary"
+                        } focus:shadow-none disabled:text-black disabled:bg-inherit`}
+                        ref={inputRef}
+                        onBlur={handleInputBlur}
+                        onKeyDown={handleInputKeyDown}
+                        onClick={() => {
+                            dispatch(setActiveTaskGroupId(id));
+                        }}
+                    />
+                    {error && (
+                        <span className="text-sm font-light text-red-500">
+                            {error}
+                        </span>
+                    )}
+                </div>
             ) : (
-                <span>{groupTitle}</span>
+                <span>{title}</span>
             )}
 
             {!isEditMode && !isDefault && (
@@ -211,7 +242,6 @@ export default function TaskGroup(props: PropsType) {
     if (isDefault || isEditMode) {
         return BaseComponent;
     }
-
 
     return (
         <Dropdown
