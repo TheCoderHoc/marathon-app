@@ -175,7 +175,7 @@ export default function TaskGroup(props: PropsType) {
                 <div>
                     <Input
                         value={groupTitleInputValue}
-                        maxLength={10}
+                        maxLength={15}
                         onChange={(e) =>
                             setGroupTitleInputValue(e.target.value)
                         }
