@@ -5,8 +5,9 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { TaskItemType } from "../../types/task.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui";
-import { toggleTaskCompletion } from "@/redux/slices/tasks";
+import { toggleTaskGroup, toggleTaskCompletion } from "@/redux/slices/tasks";
 import { MouseEvent } from "react";
+import { FaStar } from "react-icons/fa";
 
 type PropsType = {
     task: TaskItemType;
@@ -14,7 +15,7 @@ type PropsType = {
 
 export default function TaskItem(props: PropsType) {
     const {
-        task: { id, title, completed },
+        task: { id, title, completed, taskGroups },
     } = props;
 
     const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ export default function TaskItem(props: PropsType) {
     const { isTaskItemViewOpen, selectedTaskToView } = useAppSelector(
         (state) => state.UI
     );
+
+    const isStarred = taskGroups.includes(3);
 
     const handleToggleCompletion = (
         e: MouseEvent<HTMLElement, globalThis.MouseEvent>
@@ -38,6 +41,14 @@ export default function TaskItem(props: PropsType) {
         }
 
         dispatch(openTaskItemView(props.task));
+    };
+
+    const handleStarTask = (
+        e: MouseEvent<HTMLElement, globalThis.MouseEvent>
+    ) => {
+        e.stopPropagation();
+
+        dispatch(toggleTaskGroup({ taskId: id, groupId: 3 }));
     };
 
     return (
@@ -65,9 +76,17 @@ export default function TaskItem(props: PropsType) {
                     {title}
                 </span>
             </div>
+
             <Button
-                icon={<AiOutlineStar size={20} />}
+                icon={
+                    isStarred ? (
+                        <FaStar size={20} className="fill-primary" />
+                    ) : (
+                        <AiOutlineStar size={20} />
+                    )
+                }
                 className="bg-transparent border-none shadow-none"
+                onClick={handleStarTask}
                 wave={false}
             />
         </li>

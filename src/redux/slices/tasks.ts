@@ -37,6 +37,28 @@ const taskSlice = createSlice({
             });
         },
 
+        toggleTaskGroup: (
+            state,
+            action: PayloadAction<{ taskId: number; groupId: number }>
+        ) => {
+            const { taskId, groupId } = action.payload;
+
+            state.tasks = state.tasks.map((task) => {
+                if (task.id === taskId) {
+                    if (task.taskGroups.includes(groupId)) {
+                        const index = task.taskGroups.indexOf(groupId);
+                        task.taskGroups.splice(index, 1);
+                        return task;
+                    }
+
+                    task.taskGroups.push(groupId);
+                    return task;
+                }
+
+                return task;
+            });
+        },
+
         duplicateTasks: (state, action: PayloadAction<TaskItemType[]>) => {
             const tasks = action.payload;
 
@@ -45,6 +67,11 @@ const taskSlice = createSlice({
     },
 });
 
-export const { addTask, removeTask, toggleTaskCompletion, duplicateTasks } =
-    taskSlice.actions;
+export const {
+    addTask,
+    removeTask,
+    toggleTaskCompletion,
+    toggleTaskGroup,
+    duplicateTasks,
+} = taskSlice.actions;
 export default taskSlice.reducer;

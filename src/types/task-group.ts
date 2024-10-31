@@ -6,4 +6,5 @@ export interface TaskGroupType {
     Icon?: IconType;
     isDefault: boolean;
     isDuplicated?: boolean;
+    isVisible: boolean;
 }

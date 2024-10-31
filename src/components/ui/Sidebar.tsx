@@ -8,8 +8,9 @@ import TaskGroup from "./TaskGroup";
 import { twMerge } from "tailwind-merge";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { addTaskGroup } from "@/redux/slices/task-group";
+import { addTaskGroup, toggleGroupVisibility } from "@/redux/slices/task-group";
 import { openSidebarDrawer } from "@/redux/slices/ui";
+import { useEffect } from "react";
 
 type PropsType = {
     className?: string;
@@ -17,6 +18,7 @@ type PropsType = {
 
 export default function Sidebar(props: PropsType) {
     const { taskGroups } = useAppSelector((state) => state.taskGroup);
+    const { tasks } = useAppSelector((state) => state.task);
 
     const dispatch = useAppDispatch();
 
@@ -30,10 +32,24 @@ export default function Sidebar(props: PropsType) {
             id: Math.floor(Math.random() * 10000),
             title: "Untitled Group",
             isDefault: false,
+            isVisible: true,
         };
 
         dispatch(addTaskGroup(newTaskGroup));
     };
+
+    useEffect(() => {
+        const importantTasks = tasks.filter((task) =>
+            task.taskGroups.includes(3)
+        );
+
+        if (importantTasks.length > 0) {
+            dispatch(toggleGroupVisibility({ groupId: 3, isVisible: true }));
+            return;
+        }
+
+        dispatch(toggleGroupVisibility({ groupId: 3, isVisible: false }));
+    }, [tasks, dispatch]);
 
     return (
         <aside className={classNames} style={{ scrollbarWidth: "thin" }}>
@@ -67,17 +83,25 @@ export default function Sidebar(props: PropsType) {
                     />
                 </div>
 
-                {/* Task Lists */}
-                <ul className="flex flex-col gap-2.5 mt-3">
-                    {taskGroups &&
-                        taskGroups.map((taskGroup, index) => (
-                            <div key={taskGroup.id}>
-                                <TaskGroup taskGroup={taskGroup} />
+                {taskGroups && (
+                    <ul className="flex flex-col gap-2.5 mt-3">
+                        {taskGroups
+                            .filter(
+                                (group) => group.isDefault && group.isVisible
+                            )
+                            .map((group) => (
+                                <TaskGroup key={group.id} taskGroup={group} />
+                            ))}
 
-                                {index === 2 && <Divider className="my-0.5" />}
-                            </div>
-                        ))}
-                </ul>
+                        <Divider className="my-2" />
+
+                        {taskGroups
+                            .filter((group) => !group.isDefault)
+                            .map((group) => (
+                                <TaskGroup key={group.id} taskGroup={group} />
+                            ))}
+                    </ul>
+                )}
             </section>
 
             <Button

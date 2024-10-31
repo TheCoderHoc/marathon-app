@@ -43,8 +43,6 @@ export default function TaskListView() {
                 id: Math.floor(Math.random() * 1000),
                 title: taskInputValue,
                 completed: false,
-                starred: false,
-                important: false,
                 taskGroups: [1, 2, activeTaskGroupId],
                 steps: [],
             };

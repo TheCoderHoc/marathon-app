@@ -49,6 +49,21 @@ const taskGroupSlice = createSlice({
 
             state.activeTaskGroupId = taskGroupId;
         },
+
+        toggleGroupVisibility: (
+            state,
+            action: PayloadAction<{ groupId: number; isVisible: boolean }>
+        ) => {
+            const { groupId, isVisible } = action.payload;
+
+            state.taskGroups = state.taskGroups.map((group) => {
+                if (group.id === groupId) {
+                    return { ...group, isVisible: isVisible };
+                }
+
+                return group;
+            });
+        },
     },
 });
 
@@ -57,5 +72,6 @@ export const {
     removeTaskGroup,
     editTaskGroup,
     setActiveTaskGroupId,
+    toggleGroupVisibility,
 } = taskGroupSlice.actions;
 export default taskGroupSlice.reducer;

@@ -1,9 +1,9 @@
 # MARATHON
 
 ## TODO
--   Play completion sound when a task is completed
--   Implement duplicate task group
--   Starred task button the task item
+-   Play completion sound when a task is completed #pending
+-   Implement duplicate task group #pending
+-   Starred task button the task item #completed
 -   Task View Sidebar
     -   Edit task title
     -   Task step implementation

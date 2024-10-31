@@ -5,7 +5,7 @@ import Input from "@/components/atoms/Input";
 import { Dropdown, InputRef, Tag } from "antd";
 import { TaskGroupType } from "../../types/task-group";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { removeTask } from "@/redux/slices/tasks";
+import { addTask, removeTask } from "@/redux/slices/tasks";
 import {
     addTaskGroup,
     editTaskGroup,
@@ -109,7 +109,11 @@ export default function TaskGroup(props: PropsType) {
             title: title + " copy",
             isDefault: false,
             isDuplicated: true,
+            isVisible: true,
         };
+
+        console.log({ oldId: id });
+        console.log({ newTaskGroup });
 
         dispatch(addTaskGroup(newTaskGroup));
 
@@ -117,23 +121,23 @@ export default function TaskGroup(props: PropsType) {
             task.taskGroups.includes(id)
         );
 
-        console.log(currentGroupTasks);
+        const dupTasks = currentGroupTasks.map((task) => {
+            task.taskGroups.map((group) => {
+                if (group === id) {
+                    group = newTaskGroup.id;
+                    console.log(group);
+                    return group;
+                }
 
-        // const duplicatedTasks = currentGroupTasks.map((task) => {
-        //     return {
-        //         ...task,
-        //         taskGroups: task.taskGroups.map((group, index) => {
-        //             if (index === 2) {
-        //                 group = newTaskGroup.id;
-        //                 return group;
-        //             }
+                return group;
+            });
 
-        //             return group;
-        //         }),
-        //     };
-        // });
+            return task;
+        });
 
-        // dispatch(duplicateTasks(duplicatedTasks));
+        dupTasks.forEach((task) => {
+            dispatch(addTask(task));
+        });
     };
 
     const handleDeleteTaskGroup = () => {

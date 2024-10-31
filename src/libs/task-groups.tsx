@@ -13,6 +13,7 @@ export const defaultTaskGroups: TaskGroupType[] = [
         title: "My Day",
         Icon: FiSun,
         isDefault: true,
+        isVisible: true,
     },
 
     {
@@ -20,6 +21,7 @@ export const defaultTaskGroups: TaskGroupType[] = [
         title: "Tasks",
         Icon: GoHome,
         isDefault: true,
+        isVisible: true,
     },
 
     {
@@ -27,6 +29,7 @@ export const defaultTaskGroups: TaskGroupType[] = [
         title: "Important",
         Icon: AiOutlineStar,
         isDefault: true,
+        isVisible: false,
     },
 ];
 
