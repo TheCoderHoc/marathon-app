@@ -8,6 +8,7 @@ import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui";
 import { toggleTaskGroup, toggleTaskCompletion } from "@/redux/slices/tasks";
 import { MouseEvent } from "react";
 import { FaStar } from "react-icons/fa";
+import { playTaskCompletionSound } from "@/utils/audio";
 
 type PropsType = {
     task: TaskItemType;
@@ -30,6 +31,10 @@ export default function TaskItem(props: PropsType) {
         e: MouseEvent<HTMLElement, globalThis.MouseEvent>
     ) => {
         e.stopPropagation();
+
+        if (!completed) {
+            playTaskCompletionSound();
+        }
 
         dispatch(toggleTaskCompletion(id));
     };
