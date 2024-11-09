@@ -2,7 +2,7 @@
 
 ## TODO
 -   Task View Sidebar
-    -   Edit task title
+    -   Edit task title ✅
     -   Task step implementation
     -   Toggle add to my day
     -   Remind me

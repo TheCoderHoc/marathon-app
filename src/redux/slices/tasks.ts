@@ -1,4 +1,4 @@
-import { TaskItemType } from "@/types/task.types";
+import { TaskItemType, TaskStepType } from "@/types/task.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type TaskStateType = {
@@ -81,6 +81,45 @@ const taskSlice = createSlice({
         addActiveTask: (state, action: PayloadAction<number>) => {
             state.activeTaskId = action.payload;
         },
+
+        addStep: (
+            state,
+            action: PayloadAction<{ taskId: number; step: TaskStepType }>
+        ) => {
+            const { taskId, step } = action.payload;
+
+            state.tasks = state.tasks.map((task) => {
+                if (taskId === task.id) {
+                    return {
+                        ...task,
+                        steps: [...task.steps, step],
+                    };
+                }
+
+                return task;
+            });
+        },
+
+        editTaskStep: (state, action: PayloadAction<TaskStepType>) => {
+            const taskStep = action.payload;
+
+            state.tasks = state.tasks.map((task) => {
+                if (task.id === state.activeTaskId) {
+                    return {
+                        ...task,
+                        steps: task.steps.map((step) => {
+                            if (step.id === taskStep.id) {
+                                return taskStep;
+                            }
+
+                            return step;
+                        }),
+                    };
+                }
+
+                return task;
+            });
+        },
     },
 });
 
@@ -92,5 +131,7 @@ export const {
     toggleTaskGroup,
     duplicateTasks,
     addActiveTask,
+    addStep,
+    editTaskStep,
 } = taskSlice.actions;
 export default taskSlice.reducer;

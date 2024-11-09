@@ -2,7 +2,6 @@ import { Input as AntdInput } from "antd";
 import Button from "@/components/atoms/Button";
 import { AiOutlineStar } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
-import TaskStepItem from "./TaskStepItem";
 import { FiSun } from "react-icons/fi";
 import { TfiAlarmClock } from "react-icons/tfi";
 import { MdOutlineEventRepeat } from "react-icons/md";
@@ -16,6 +15,7 @@ import { closeTaskItemView } from "@/redux/slices/ui";
 import TextArea from "../atoms/TextArea";
 import { KeyboardEvent, useState } from "react";
 import { editTask } from "@/redux/slices/tasks";
+import TaskStepList from "./TaskStepList";
 
 export default function TaskItemViewArea() {
     const { tasks, activeTaskId } = useAppSelector((state) => state.task);
@@ -67,19 +67,7 @@ export default function TaskItemViewArea() {
                     />
                 </div>
 
-                {activeTask && (
-                    <ul className="flex flex-col gap-2">
-                        {activeTask?.steps?.length > 0 && (
-                            <>
-                                <TaskStepItem />
-                                <TaskStepItem />
-                                <TaskStepItem />
-                            </>
-                        )}
-
-                        <TaskStepItem new />
-                    </ul>
-                )}
+                {activeTask && <TaskStepList activeTask={activeTask} />}
             </div>
 
             <Button

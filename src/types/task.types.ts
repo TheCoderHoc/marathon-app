@@ -3,5 +3,11 @@ export interface TaskItemType {
     title: string;
     completed: boolean;
     taskGroups: number[];
-    steps: Partial<TaskItemType>[];
+    steps: TaskStepType[];
+}
+
+export interface TaskStepType {
+    id: number;
+    title: string;
+    completed: boolean;
 }
