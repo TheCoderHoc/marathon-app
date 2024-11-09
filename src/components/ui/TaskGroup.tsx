@@ -5,7 +5,7 @@ import Input from "@/components/atoms/Input";
 import { Dropdown, InputRef, Tag } from "antd";
 import { TaskGroupType } from "../../types/task-group";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { addTask, removeTask } from "@/redux/slices/tasks";
+import { removeTask } from "@/redux/slices/tasks";
 import {
     addTaskGroup,
     editTaskGroup,
@@ -112,32 +112,11 @@ export default function TaskGroup(props: PropsType) {
             isVisible: true,
         };
 
-        console.log({ oldId: id });
-        console.log({ newTaskGroup });
-
         dispatch(addTaskGroup(newTaskGroup));
 
-        const currentGroupTasks = tasks.filter((task) =>
-            task.taskGroups.includes(id)
-        );
-
-        const dupTasks = currentGroupTasks.map((task) => {
-            task.taskGroups.map((group) => {
-                if (group === id) {
-                    group = newTaskGroup.id;
-                    console.log(group);
-                    return group;
-                }
-
-                return group;
-            });
-
-            return task;
-        });
-
-        dupTasks.forEach((task) => {
-            dispatch(addTask(task));
-        });
+        // const currentGroupTasks = tasks.filter((task) =>
+        //     task.taskGroups.includes(id)
+        // );
     };
 
     const handleDeleteTaskGroup = () => {

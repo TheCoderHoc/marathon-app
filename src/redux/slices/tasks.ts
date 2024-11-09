@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type TaskStateType = {
     tasks: TaskItemType[];
+    activeTaskId?: number;
 };
 
 const initialState: TaskStateType = {
@@ -17,6 +18,18 @@ const taskSlice = createSlice({
             const newTask = action.payload;
 
             state.tasks.push(newTask);
+        },
+
+        editTask: (state, action: PayloadAction<TaskItemType>) => {
+            const taskToEdit = action.payload;
+
+            state.tasks = state.tasks.map((task) => {
+                if (task.id === taskToEdit.id) {
+                    return taskToEdit;
+                }
+
+                return task;
+            });
         },
 
         removeTask: (state, action: PayloadAction<number>) => {
@@ -64,14 +77,20 @@ const taskSlice = createSlice({
 
             state.tasks = [...state.tasks, ...tasks];
         },
+
+        addActiveTask: (state, action: PayloadAction<number>) => {
+            state.activeTaskId = action.payload;
+        },
     },
 });
 
 export const {
     addTask,
     removeTask,
+    editTask,
     toggleTaskCompletion,
     toggleTaskGroup,
     duplicateTasks,
+    addActiveTask,
 } = taskSlice.actions;
 export default taskSlice.reducer;

@@ -1,8 +1,6 @@
 # MARATHON
 
 ## TODO
--   Play completion sound when a task is completed #completed
--   Implement duplicate task group #pending
 -   Task View Sidebar
     -   Edit task title
     -   Task step implementation
@@ -20,5 +18,8 @@
 -   Edit task group title on task list view component
 -   Task group icon and uploadable custom image
 -   Take out the homepage layout
+-   Implement duplicate task group #pending
+-   AI
+    -   Paraphrase tool
 
 ## BUGS

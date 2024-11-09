@@ -5,7 +5,11 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { TaskItemType } from "../../types/task.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeTaskItemView, openTaskItemView } from "@/redux/slices/ui";
-import { toggleTaskGroup, toggleTaskCompletion } from "@/redux/slices/tasks";
+import {
+    toggleTaskGroup,
+    toggleTaskCompletion,
+    addActiveTask,
+} from "@/redux/slices/tasks";
 import { MouseEvent } from "react";
 import { FaStar } from "react-icons/fa";
 import { playTaskCompletionSound } from "@/utils/audio";
@@ -21,9 +25,8 @@ export default function TaskItem(props: PropsType) {
 
     const dispatch = useAppDispatch();
 
-    const { isTaskItemViewOpen, selectedTaskToView } = useAppSelector(
-        (state) => state.UI
-    );
+    const { activeTaskId } = useAppSelector((state) => state.task);
+    const { isTaskItemViewOpen } = useAppSelector((state) => state.UI);
 
     const isStarred = taskGroups.includes(3);
 
@@ -40,12 +43,13 @@ export default function TaskItem(props: PropsType) {
     };
 
     const handleClick = () => {
-        if (selectedTaskToView?.id === id && isTaskItemViewOpen) {
+        if (activeTaskId === id && isTaskItemViewOpen) {
             dispatch(closeTaskItemView());
             return;
         }
 
-        dispatch(openTaskItemView(props.task));
+        dispatch(addActiveTask(id));
+        dispatch(openTaskItemView());
     };
 
     const handleStarTask = (
