@@ -7,8 +7,12 @@ import { LuCircle } from "react-icons/lu";
 import { TaskStepType } from "@/types/task.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { addStep, editTaskStep } from "@/redux/slices/tasks";
-import { InputRef } from "antd";
+import { Dropdown, InputRef } from "antd";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import {
+    taskStepDropdownMenuItems,
+    TaskStepDropdownParamsType,
+} from "@/libs/task-groups";
 
 type PropsType = {
     new?: boolean;
@@ -76,9 +80,12 @@ export default function TaskStepItem(props: PropsType) {
         }
     };
 
-    const toggleStepCompletion = (e: MouseEvent<HTMLElement>) => {
+    const handleToggleCompletion = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
+        toggleCompletion();
+    };
 
+    const toggleCompletion = () => {
         if (props.step) {
             const updatedTaskStep = {
                 ...props.step,
@@ -87,6 +94,11 @@ export default function TaskStepItem(props: PropsType) {
 
             dispatch(editTaskStep(updatedTaskStep));
         }
+    };
+
+    const dropdownParams: TaskStepDropdownParamsType = {
+        toggleCompletion: toggleCompletion,
+        completed: props.step?.completed as boolean,
     };
 
     return (
@@ -107,17 +119,22 @@ export default function TaskStepItem(props: PropsType) {
                     />
                 ) : props.step?.completed ? (
                     <Button
-                        icon={<IoCheckmarkCircleSharp size={20} />}
+                        icon={
+                            <IoCheckmarkCircleSharp
+                                size={20}
+                                className="text-gray-500"
+                            />
+                        }
                         className="bg-transparent border-none shadow-none outline-none border-transparent p-0 -ml-0.5"
                         wave={false}
-                        onClick={toggleStepCompletion}
+                        onClick={handleToggleCompletion}
                     />
                 ) : (
                     <Button
                         icon={<LuCircle size={20} className="" />}
                         className="bg-transparent border-none shadow-none outline-none border-transparent p-0 -ml-0.5"
                         wave={false}
-                        onClick={toggleStepCompletion}
+                        onClick={handleToggleCompletion}
                     />
                 )}
 
@@ -135,16 +152,26 @@ export default function TaskStepItem(props: PropsType) {
                 />
             </div>
 
-            <Button
-                icon={
-                    <BiDotsVerticalRounded
-                        size={20}
-                        className="text-gray-500"
+            {!props.new && (
+                <Dropdown
+                    trigger={["click"]}
+                    menu={{
+                        items: taskStepDropdownMenuItems(dropdownParams),
+                    }}
+                    placement="bottomRight"
+                >
+                    <Button
+                        icon={
+                            <BiDotsVerticalRounded
+                                size={20}
+                                className="text-gray-500"
+                            />
+                        }
+                        className="bg-transparent border-none shadow-none"
+                        wave={false}
                     />
-                }
-                className="bg-transparent border-none shadow-none"
-                wave={false}
-            />
+                </Dropdown>
+            )}
         </li>
     );
 }
